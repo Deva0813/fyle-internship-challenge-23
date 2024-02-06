@@ -1,5 +1,68 @@
-<div class="grid h-screen place-items-center">
-  <div class="font-bold text-3xl">
-    Fyle Internship Challenge
+<!DOCTYPE html>
+<div class="grid h-[10vh] place-items-center">
+  <div class="font-bold text-3xl">Fyle Internship Challenge</div>
+</div>
+
+<div class="2xl:container py-10 px-40 mx-auto">
+  <div class="grid gap-5 h-[80vh] place-content-center" *ngIf="!userDetails">
+    <div class="">
+      <label for="username" class="">Username : </label>
+      <input
+        type="text"
+        name="username"
+        class="py-1 ml-3 outline-none px-2 rounded-md border-[1px]"
+        id="username"
+        [(ngModel)]="username"
+      />
+    </div>
+    <button
+      (click)="getUserAndRepo()"
+      class="bg-[#FF2E63] text-white p-2 rounded-md hover:bg-[#ff688e] transition-all"
+    >
+      Get user details
+    </button>
   </div>
+
+  <div class="grid grid-cols-[auto,1fr] text-slate-600" *ngIf="userDetails">
+    <div class="p-5">
+      <img
+        src="{{ userDetails.avatar_url }}"
+        class="w-40 h-40 rounded-full"
+        alt=""
+        srcset=""
+      />
+    </div>
+    <div class="ml-5 p-7 flex flex-col gap-2">
+      <div class="text-2xl font-medium">{{ userDetails.name }}</div>
+      <div class="">{{ userDetails.bio }}</div>
+      <div class="flex gap-2">
+        <img
+          src="../assets/location.svg"
+          width="16px"
+          height="16px"
+          alt=""
+          srcset=""
+        />
+        <div class="">{{ userDetails.location }}</div>
+      </div>
+      <div class="">
+        <span class="font-medium">Twitter : </span>
+        <a
+          class="text-[#FF2E63]"
+          href="https://twitter.com/{{ userDetails.twitter_username }}"
+          target="_blank"
+          >https://twitter.com/{{ userDetails.twitter_username }}</a
+        >
+      </div>
+    </div>
+  </div>
+  <div class="p-5 flex gap-3 text-slate-600">
+    <img src="../assets/link.svg" width="16" height="16" alt="link" />
+    <a href="{{ userDetails.html_url }}" target="_blank">{{
+      userDetails.html_url
+    }}</a>
+  </div>
+
+  <div class="p"></div>
+
 </div>
