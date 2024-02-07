@@ -1,8 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
+    imports:[HttpClientTestingModule,FormsModule],
+    providers:[AppComponent],
     declarations: [AppComponent]
   }));
 
@@ -22,6 +27,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('fyle-frontend-challenge app is running!');
+    expect(compiled.querySelector('#title')?.textContent).toContain('Fyle Internship Challenge 🚀');
   });
+
 });
