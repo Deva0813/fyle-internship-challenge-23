@@ -7,59 +7,79 @@ import { ApiService } from './services/api.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  username: string = 'johnpapa';
+  username: string = '';
   page_no: number = 1;
   limit: number = 10;
   total_repos: number = 0;
   total_pages: number = 0;
+  title:string = "fyle-frontend-challenge"
 
-  userDetails: any;
+  repo_loading_state: boolean = false;
+  user_loading_state: boolean = false;
+  no_user_found: boolean = false;
+
+  userDetails: any = null;
   userRepos: any = [];
 
   constructor(private apiService: ApiService, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit() {
-    this.apiService.getUser(this.username).subscribe((user: any) => {
-      this.userDetails = user;
-      this.total_repos = user.public_repos;
-      this.total_pages = Math.ceil(this.total_repos / this.limit);
-    });
+  ngOnInit() {}
 
-    this.apiService.getReops(this.username, 1, 10).subscribe((repos) => {
-      this.userRepos = repos;
-      this.getRepoLang();
-    });
-  }
+  async getUserAndRepo() {
+    this.user_loading_state = true;
 
-  getUserAndRepo() {
-    this.apiService.getUser(this.username).subscribe((user: any) => {
-      this.userDetails = user;
-      this.total_repos = user.public_repos;
-      this.total_pages = Math.ceil(this.total_repos / this.limit);
-    });
+    this.apiService.getUser(this.username).subscribe(
+      async (user: any) => {
+        this.userDetails = await user;
+        this.total_repos = await user.public_repos;
+        this.total_pages = Math.ceil(this.total_repos / this.limit);
+        // this.no_user_found =false;
+      },
+      async (error) => {
+        if (error.status === 404) {
+          this.no_user_found = true;
+          setTimeout(()=>{
+            this.no_user_found = false;
+          },3000)
+          this.user_loading_state = false;
+        } else {
+          console.log(error);
+        }
+      }
+    );
 
-    this.apiService.getReops(this.username, 1, 10).subscribe((repos) => {
-      this.userRepos = repos;
-      this.getRepoLang();
-    });
+    this.apiService.getReops(this.username, 1, 10).subscribe(
+      async (repos) => {
+        this.userRepos = await repos;
+        await this.getRepoLang();
+        this.user_loading_state = false;
+      },
+      async (error) => {
+        console.log(error);
+        this.user_loading_state = false;
+      }
+    );
   }
 
   getRepos() {
+    this.repo_loading_state = true;
     this.apiService
       .getReops(this.username, this.page_no, this.limit)
-      .subscribe((repos: any) => {
-        this.userRepos = repos;
+      .subscribe(async (repos: any) => {
+        this.userRepos = await repos;
         this.cdr.detectChanges();
         this.getRepoLang();
       });
   }
 
-  getRepoLang() {
-    this.userRepos.forEach((repo: any) => {
+  async getRepoLang() {
+    await this.userRepos.forEach((repo: any) => {
       this.apiService
         .getRepoLangFromUrl(repo.languages_url)
         .subscribe((lang) => (repo.languages = Object.keys(lang)));
     });
+
+    this.repo_loading_state = false;
   }
 
   onLimitChange() {
@@ -97,5 +117,19 @@ export class AppComponent implements OnInit {
       this.page_no = pageNumber;
       this.getRepos();
     }
+  }
+
+  handleclear() {
+    this.username = '';
+    this.page_no = 1;
+    this.limit = 10;
+    this.total_repos = 0;
+    this.total_pages = 0;
+
+    this.repo_loading_state = false;
+    this.user_loading_state = false;
+
+    this.userDetails = null;
+    this.userRepos = [];
   }
 }
