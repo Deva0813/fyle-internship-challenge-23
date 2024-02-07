@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   limit: number = 10;
   total_repos: number = 0;
   total_pages: number = 0;
-  title:string = "fyle-frontend-challenge"
+  title:string = "fyle-frontend-challenge";
 
   repo_loading_state: boolean = false;
   user_loading_state: boolean = false;
