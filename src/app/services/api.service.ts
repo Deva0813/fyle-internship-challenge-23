@@ -11,10 +11,10 @@ export class ApiService {
   getUser(githubUsername: string) {
     return this.httpClient.get(
       `https://api.github.com/users/${githubUsername}`,{
-        headers: {
-          Authorization: 'Bearer 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',
-          'X-GitHub-Api-Version': '2022-11-28',
-        },
+        // headers: {
+        //   Authorization: 'Bearer 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',
+        //   'X-GitHub-Api-Version': '2022-11-28',
+        // },
       }
     );
   }
@@ -25,20 +25,20 @@ export class ApiService {
     return this.httpClient.get(
       `https://api.github.com/users/${githubUsername}/repos?page=${page}&per_page=${limit}`,
       {
-        headers: {
-          Authorization: 'Bearer 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',
-          'X-GitHub-Api-Version': '2022-11-28',
-        },
+        // headers: {
+        //   Authorization: 'Bearer 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',
+        //   'X-GitHub-Api-Version': '2022-11-28',
+        // },
       }
     );
   }
 
   getRepoLangFromUrl(url: string) {
     return this.httpClient.get(url,{
-      headers: {
-        Authorization: 'Bearer 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',
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
+      // headers: {
+      //   Authorization: 'Bearer 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',
+      //   'X-GitHub-Api-Version': '2022-11-28',
+      // },
     });
   }
 }
