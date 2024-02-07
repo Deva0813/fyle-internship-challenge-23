@@ -12,7 +12,7 @@ export class ApiService {
     return this.httpClient.get(
       `https://api.github.com/users/${githubUsername}`,{
         // headers: {
-        //   Authorization: 'Bearer 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',
+        //   Authorization: 'Bearer ',
         //   'X-GitHub-Api-Version': '2022-11-28',
         // },
       }
@@ -26,7 +26,7 @@ export class ApiService {
       `https://api.github.com/users/${githubUsername}/repos?page=${page}&per_page=${limit}`,
       {
         // headers: {
-        //   Authorization: 'Bearer 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',
+        //   Authorization: 'Bearer ',
         //   'X-GitHub-Api-Version': '2022-11-28',
         // },
       }
@@ -36,7 +36,7 @@ export class ApiService {
   getRepoLangFromUrl(url: string) {
     return this.httpClient.get(url,{
       // headers: {
-      //   Authorization: 'Bearer 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',
+      //   Authorization: 'Bearer ',
       //   'X-GitHub-Api-Version': '2022-11-28',
       // },
     });
