@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <div class="grid h-[10vh] place-items-center">
-  <div class="font-bold text-3xl">Fyle Internship Challenge 🚀</div>
+  <div class="grid grid-cols-3">
+    <div class=""></div>
+    <div class="font-bold text-3xl">Fyle Internship Challenge 🚀</div>
+    <div class="flex justify-end">
+      <button
+        (click)="handleclear()"
+        class="bg-[#FF2E63] px-4 py-2 rounded-md text-white w-fit"
+        *ngIf="userDetails"
+      >
+        Back to search
+      </button>
+    </div>
+  </div>
 </div>
 
-<div class="2xl:container py-10 px-40 mx-auto">
-  <div class="grid gap-5 h-[80vh] place-content-center" *ngIf="!userDetails">
+<div class="2xl:container py-10 px-40 mx-auto ">
+  <div class="grid gap-5 h-[80vh] place-content-center " *ngIf="!userDetails">
     <div class="">
       <label for="username" class="">Username : </label>
       <input
@@ -20,9 +32,44 @@
     >
       Get user details
     </button>
+    <div class="text-center mt-3 text-slate-500 " *ngIf="no_user_found">
+      ⚠️ No user found in this name!!!
+    </div>
   </div>
 
-  <div class="" *ngIf="userDetails">
+  <div class="" *ngIf="user_loading_state && userDetails">
+    <div class="grid grid-cols-[auto,1fr] text-slate-600">
+      <div class="p-5">
+        <div class="w-40 h-40 rounded-full bg-slate-300"></div>
+      </div>
+      <div class="ml-5 p-7 flex flex-col gap-2">
+        <div class="text-2xl font-medium rounded-md bg-slate-300"></div>
+        <div class="rounded-md bg-slate-300"></div>
+        <div class="flex gap-2">
+          <img
+            src="../assets/location.svg"
+            width="16px"
+            height="16px"
+            alt=""
+            srcset=""
+          />
+          <div class="rounded-md bg-slate-300"></div>
+        </div>
+        <div class="">
+          <span class="font-medium">Twitter : </span>
+          <div class="rounded-md bg-slate-300"></div>
+        </div>
+      </div>
+    </div>
+    <div class="p-5 flex gap-3 text-slate-600">
+      <img src="../assets/link.svg" width="16" height="16" alt="link" />
+      <a href="{{ userDetails.html_url }}" target="_blank">{{
+        userDetails.html_url
+      }}</a>
+    </div>
+  </div>
+
+  <div class="" *ngIf="userDetails && !user_loading_state">
     <div class="grid grid-cols-[auto,1fr] text-slate-600">
       <div class="p-5">
         <img
@@ -56,7 +103,7 @@
         </div>
       </div>
     </div>
-    <div class="p-5 flex gap-3 text-slate-600">
+    <div class="p-5 flex gap-3 text-slate-600" *ngIf="userDetails.html_url">
       <img src="../assets/link.svg" width="16" height="16" alt="link" />
       <a href="{{ userDetails.html_url }}" target="_blank">{{
         userDetails.html_url
@@ -65,7 +112,7 @@
 
     <hr />
 
-    <div class="p-5 flex justify-between items-center">
+    <div class="p-5 flex justify-between items-center transition-all">
       <div class="text-lg font-medium text-slate-500">
         {{ userDetails.name }}'s Repositories
       </div>
@@ -89,12 +136,26 @@
       </div>
     </div>
 
-    <div class="py-5 px-2 grid grid-cols-3 gap-5">
+    <div
+      class="py-5 relative px-2 grid grid-cols-2 gap-5"
+      *ngIf="repo_loading_state"
+    >
+      <div
+        class="bg-white flex flex-col h-40 gap-3 scale-95 hover:scale-100 transition-all hover:shadow-lg rounded-md p-4"
+        *ngFor="let repo of [1, 2, 3, 4, 5, 6]"
+      >
+        <div
+          class="absolute inset-0 rounded-md bg-slate-200 animate-pulse"
+        ></div>
+      </div>
+    </div>
+
+    <div class="py-5 px-2 grid grid-cols-2 gap-5" *ngIf="!repo_loading_state">
       <a
+        *ngFor="let repo of userRepos"
         href="{{ repo.html_url }}"
         target="_blank"
-        class="border-2 bg-white flex flex-col gap-3 scale-95 hover:scale-100 transition-all hover:shadow-lg rounded-md p-4"
-        *ngFor="let repo of userRepos"
+        class="border-2 bg-white flex flex-col gap-4 min-h-40 scale-95 hover:scale-100 transition-all hover:shadow-lg rounded-md p-6"
       >
         <div
           class="text-lg font-medium text-sky-600 overflow-hidden text-ellipsis line-clamp-1"
@@ -104,10 +165,10 @@
         <div class="text-sm overflow-hidden text-ellipsis line-clamp-1">
           {{ repo.description }}
         </div>
-        <div class="flex gap-3" *ngIf="repo">
+        <div class="flex gap-3 flex-wrap" *ngIf="repo">
           <div
             class="text-xs bg-[#FF2E63]/80 text-white w-fit rounded-sm py-1 px-2"
-            *ngFor="let lang of repo.languages.slice(0, 4)"
+            *ngFor="let lang of repo.languages"
           >
             {{ lang }}
           </div>
