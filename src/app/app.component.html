@@ -1,5 +1,144 @@
-<div class="grid h-screen place-items-center">
-  <div class="font-bold text-3xl">
-    Fyle Internship Challenge
+<!DOCTYPE html>
+<div class="grid h-[10vh] place-items-center">
+  <div class="font-bold text-3xl">Fyle Internship Challenge 🚀</div>
+</div>
+
+<div class="2xl:container py-10 px-40 mx-auto">
+  <div class="grid gap-5 h-[80vh] place-content-center" *ngIf="!userDetails">
+    <div class="">
+      <label for="username" class="">Username : </label>
+      <input
+        type="text"
+        name="username"
+        class="py-1 ml-3 outline-none px-2 rounded-md border-[1px]"
+        [(ngModel)]="username"
+      />
+    </div>
+    <button
+      (click)="getUserAndRepo()"
+      class="bg-[#FF2E63] text-white p-2 rounded-md hover:bg-[#ff688e] transition-all"
+    >
+      Get user details
+    </button>
+  </div>
+
+  <div class="" *ngIf="userDetails">
+    <div class="grid grid-cols-[auto,1fr] text-slate-600">
+      <div class="p-5">
+        <img
+          src="{{ userDetails.avatar_url }}"
+          class="w-40 h-40 rounded-full"
+          alt=""
+          srcset=""
+        />
+      </div>
+      <div class="ml-5 p-7 flex flex-col gap-2">
+        <div class="text-2xl font-medium">{{ userDetails.name }}</div>
+        <div class="">{{ userDetails.bio }}</div>
+        <div class="flex gap-2">
+          <img
+            src="../assets/location.svg"
+            width="16px"
+            height="16px"
+            alt=""
+            srcset=""
+          />
+          <div class="">{{ userDetails.location }}</div>
+        </div>
+        <div class="">
+          <span class="font-medium">Twitter : </span>
+          <a
+            class="text-[#FF2E63]"
+            href="https://twitter.com/{{ userDetails.twitter_username }}"
+            target="_blank"
+            >https://twitter.com/{{ userDetails.twitter_username }}</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="p-5 flex gap-3 text-slate-600">
+      <img src="../assets/link.svg" width="16" height="16" alt="link" />
+      <a href="{{ userDetails.html_url }}" target="_blank">{{
+        userDetails.html_url
+      }}</a>
+    </div>
+
+    <hr />
+
+    <div class="p-5 flex justify-between items-center">
+      <div class="text-lg font-medium text-slate-500">
+        {{ userDetails.name }}'s Repositories
+      </div>
+      <div class="">
+        <label for="limit" class="text-sm text-slate-500"
+          >No. of repos to view :
+        </label>
+        <select
+          name="limit"
+          id="limit"
+          [(ngModel)]="limit"
+          class="text-sm text-[#FF2E63] font-medium outline-none"
+          (change)="onLimitChange()"
+        >
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="py-5 px-2 grid grid-cols-3 gap-5">
+      <a
+        href="{{ repo.html_url }}"
+        target="_blank"
+        class="border-2 bg-white flex flex-col gap-3 scale-95 hover:scale-100 transition-all hover:shadow-lg rounded-md p-4"
+        *ngFor="let repo of userRepos"
+      >
+        <div
+          class="text-lg font-medium text-sky-600 overflow-hidden text-ellipsis line-clamp-1"
+        >
+          {{ repo.name }}
+        </div>
+        <div class="text-sm overflow-hidden text-ellipsis line-clamp-1">
+          {{ repo.description }}
+        </div>
+        <div class="flex gap-3" *ngIf="repo">
+          <div
+            class="text-xs bg-[#FF2E63]/80 text-white w-fit rounded-sm py-1 px-2"
+            *ngFor="let lang of repo.languages.slice(0, 4)"
+          >
+            {{ lang }}
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="p-5 text-[#FF2E63] flex gap-3 justify-center items-center">
+      <button
+        class="bg-[#FF2E63] py-1 px-2 rounded-md text-white"
+        (click)="prevPage()"
+      >
+        Prev
+      </button>
+      <ng-container *ngFor="let pageNumber of getPageNumbers()">
+        <button
+          (click)="goToPage(pageNumber)"
+          [class.active]="pageNumber === page_no"
+          class="border-[#FF2E63] hover:bg-[#FF2E63]/60 hover:text-white border-[1px] py-1 px-2 rounded-md transition-all {{
+            pageNumber === page_no ? 'bg-[#FF2E63] text-white' : ''
+          }}"
+        >
+          {{ pageNumber }}
+        </button>
+      </ng-container>
+      <button
+        class="bg-[#FF2E63] py-1 px-2 rounded-md text-white"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </div>
   </div>
 </div>
